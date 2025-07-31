@@ -9,7 +9,7 @@ import { useCart } from "./state/CartContext";
 // PUBLIC_INTERFACE
 function App() {
   const [theme, setTheme] = useState("light");
-  const { cart } = useCart();
+  const { cartCount } = useCart(); // Use cartCount, always live
   const location = useLocation();
 
   // Effect to apply theme to document element
@@ -44,8 +44,8 @@ function App() {
             <li>
               <Link to="/cart">
                 Cart
-                {cart.length > 0 && (
-                  <span className="cart-badge">{cart.reduce((sum, item) => sum + item.quantity, 0)}</span>
+                {cartCount > 0 && (
+                  <span className="cart-badge">{cartCount}</span>
                 )}
               </Link>
             </li>
