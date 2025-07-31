@@ -23,6 +23,38 @@ function Cart() {
     dispatch({ type: "CLEAR_CART" });
   };
 
+  // PUBLIC_INTERFACE
+  // Generates a WhatsApp order message: item summary, total, and order intent.
+  const generateOrderMessage = () => {
+    let msg = `Hello PlayPals 👋%0AI'm ready to order:%0A`;
+    cart.forEach((item, idx) => {
+      msg += `%0A${idx + 1}. ${item.product.name} (Brand: ${item.product.brand}) — Qty: ${item.quantity} x $${item.product.price.toFixed(2)} = $${(
+        item.quantity * item.product.price
+      ).toFixed(2)}`;
+    });
+    msg += `%0A%0ATotal: $${cartTotal}%0A%0AI'd like to place this order via WhatsApp.`;
+    return msg;
+  };
+
+  // PUBLIC_INTERFACE
+  // Handles clicking the WhatsApp order CTA
+  const handleOrderOnWhatsApp = () => {
+    if (!cart || cart.length === 0) return;
+    // Set your WhatsApp business number (with country code, no plus sign)
+    const phone = "971500000000"; // <-- UPDATE to real business number
+    const msg = generateOrderMessage();
+    const encodedMsg = encodeURIComponent(msg.replace(/%0A/g, "\n")); // WhatsApp needs real linebreaks
+    // Device detect for mobile/desktop targeting WhatsApp app or web
+    const isMobile =
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent
+      );
+    const waBase = isMobile
+      ? `https://wa.me/${phone}?text=${encodedMsg}`
+      : `https://web.whatsapp.com/send?phone=${phone}&text=${encodedMsg}`;
+    window.open(waBase, "_blank", "noopener");
+  };
+
   return (
     <section style={{ maxWidth: 600, margin: "0 auto", padding: 16 }}>
       <h2>Your Cart</h2>
@@ -43,7 +75,10 @@ function Cart() {
                 }}
               >
                 <img
-                  src={item.product.images?.[0] || "https://cdn.pixabay.com/photo/2013/07/13/12/10/toy-146162_1280.png"}
+                  src={
+                    item.product.images?.[0] ||
+                    "https://cdn.pixabay.com/photo/2013/07/13/12/10/toy-146162_1280.png"
+                  }
                   alt={item.product.name}
                   style={{
                     width: 60,
@@ -107,7 +142,15 @@ function Cart() {
               </li>
             ))}
           </ul>
-          <div style={{ display: "flex", flexDirection: "column", gap: 10, alignItems: "flex-end", marginTop: 22 }}>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: 10,
+              alignItems: "flex-end",
+              marginTop: 22,
+            }}
+          >
             <div style={{ fontWeight: 600, fontSize: 17 }}>
               Total ({cartCount} item{cartCount === 1 ? "" : "s"}):{" "}
               <span style={{ color: "#43b5a0" }}>${cartTotal}</span>
@@ -127,6 +170,31 @@ function Cart() {
               aria-label="Clear all items from cart"
             >
               Clear Cart
+            </button>
+            {/* WhatsApp CTA */}
+            <button
+              className="cta-btn"
+              style={{
+                background: "#43b5a0",
+                color: "#fff",
+                border: "none",
+                borderRadius: 16,
+                fontWeight: 700,
+                fontSize: 18,
+                padding: "13px 38px",
+                marginTop: 10,
+                boxShadow: "0 2px 14px rgba(67,181,160,0.18)",
+                cursor: "pointer",
+                alignSelf: "flex-end",
+              }}
+              onClick={handleOrderOnWhatsApp}
+              aria-label="Order on WhatsApp"
+              disabled={cart.length === 0}
+            >
+              <span role="img" aria-label="WhatsApp">
+                🟢
+              </span>{" "}
+              Order on WhatsApp
             </button>
           </div>
         </>

@@ -114,3 +114,28 @@
     font-size: 12px;
   }
 }
+
+/* WhatsApp CTA style (Cart page) */
+.cta-btn {
+  font-size: 1.09rem;
+  font-weight: 700;
+  padding: 13px 34px;
+  border-radius: 2em;
+  border: none;
+  background: #43b5a0;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s, transform 0.10s;
+  box-shadow: 0 2px 12px rgba(67,181,160,0.13);
+  outline: none;
+  margin-top: 6px;
+}
+.cta-btn[disabled] {
+  opacity: 0.42;
+  cursor: not-allowed;
+}
+.cta-btn:hover, .cta-btn:focus {
+  background: #1E836b;
+  color: #fadb4e;
+  transform: scale(1.036);
+}
