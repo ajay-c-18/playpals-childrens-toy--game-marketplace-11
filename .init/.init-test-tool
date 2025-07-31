@@ -1,0 +1,4 @@
+{
+    "command": "npm run test",
+    "working_directory": "/home/kavia/workspace/code-generation/playpals-childrens-toy--game-marketplace-11/playpals_frontend"
+}
